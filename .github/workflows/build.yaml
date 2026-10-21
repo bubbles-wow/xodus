@@ -12,15 +12,6 @@ jobs:
         run: |
           rustup update stable --no-self-update
           rustup default stable
-      - name: Install protoc
-        uses: arduino/setup-protoc@v3
-        with:
-          version: '23.4'
-      - name: Configure OpenSSL vendored toolchain (perl+nasm, preinstalled on runner)
-        shell: bash
-        run: |
-          echo "PERL=$(which perl)" >> $GITHUB_ENV
-          echo "NASM_DIR=$(dirname $(which nasm))" >> $GITHUB_ENV
       - uses: actions/cache@v4
         with:
           path: |
