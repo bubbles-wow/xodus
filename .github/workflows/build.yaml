@@ -26,7 +26,7 @@ jobs:
           key: windows-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build xodus-cli
         shell: bash
-        run: cargo build --release -p xodus-cli --features key-chain-file
+        run: cargo build --release -p xodus-cli --features xodus/key-chain-file
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
