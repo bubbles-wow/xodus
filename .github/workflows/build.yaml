@@ -20,8 +20,13 @@ jobs:
             ~/.cargo/git/db
             target
           key: windows-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Verify perl (Strawberry, not MSYS2)
+        shell: pwsh
+        run: |
+          (Get-Command perl).Source
+          perl -e "use Locale::Maketext::Simple; print 'perl ok'"
       - name: Build xodus-cli
-        shell: bash
+        shell: pwsh
         run: cargo build --release -p xodus-cli --features xodus/key-chain-file
       - name: Upload artifact
         uses: actions/upload-artifact@v4
