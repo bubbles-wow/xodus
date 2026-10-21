@@ -8,6 +8,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install OpenSSL
+        shell: pwsh
+        run: choco install openssl -y --no-progress
       - name: Install Rust
         run: |
           rustup update stable --no-self-update
@@ -26,6 +29,8 @@ jobs:
           key: windows-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build xodus-cli
         shell: bash
+        env:
+          OPENSSL_DIR: 'C:\Program Files\OpenSSL-Win64'
         run: cargo build --release -p xodus-cli --features xodus/key-chain-file
       - name: Upload artifact
         uses: actions/upload-artifact@v4
