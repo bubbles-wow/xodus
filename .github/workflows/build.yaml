@@ -1,0 +1,37 @@
+name: Windows build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust
+        run: |
+          rustup update stable --no-self-update
+          rustup default stable
+      - name: Install protoc
+        uses: arduino/setup-protoc@v3
+        with:
+          version: '23.4'
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+            target
+          key: windows-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Build xodus-cli
+        shell: bash
+        run: cargo build --release -p xodus-cli --features key-chain-file
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: xodus-cli-windows
+          path: |
+            target/release/xodus-cli.exe
+            target/release/*.dll
+          if-no-files-found: error
